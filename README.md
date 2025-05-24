@@ -116,6 +116,50 @@ Each example file contains specific compilation instructions in its comments, as
 **Building All Examples:**
 A simple shell script could be used to compile all examples, but care must be taken due to differing C++ standards and specific flags. It's generally recommended to compile examples individually as per their embedded instructions.
 
+## Building with CMake
+
+CMake can be used to build all the examples in this project. This is generally recommended, especially for C++20 features like modules, as CMake can help manage compiler-specific flags and build order.
+
+**Prerequisites:**
+-   CMake (version 3.16 or higher recommended, 3.20+ for more robust C++20 modules support with some compilers like MSVC, 3.28+ for best native module support).
+-   A C++ compiler that supports C++20 (GCC 9+, Clang 10+, MSVC VS2019 16.10+ or VS2022).
+
+**General Build Steps:**
+
+1.  **Create a build directory:**
+    It's best practice to create a separate directory for the build files.
+    ```bash
+    mkdir build
+    cd build
+    ```
+
+2.  **Run CMake to configure the project:**
+    From within the `build` directory, run CMake, pointing it to the root of the project (where the main `CMakeLists.txt` is located).
+    ```bash
+    cmake ..
+    ```
+    -   You might need to specify a generator if you want to use a specific build system (e.g., `-G "Ninja"` or `-G "Visual Studio 17 2022"`).
+    -   You can specify the C++ compiler if CMake doesn't pick up the correct one:
+        `cmake .. -DCMAKE_CXX_COMPILER=g++-10`
+
+3.  **Build the executables:**
+    After CMake has configured the project, you can build all targets.
+    ```bash
+    cmake --build .
+    ```
+    Or, if using Makefiles:
+    ```bash
+    make
+    ```
+    Executables will be placed in the `build` directory, within subfolders corresponding to their C++ standard version (e.g., `build/cpp11/core_language/auto_cpp11`).
+
+**Notes on Specific Features:**
+-   **C++20 Modules:** The CMake configuration attempts a basic setup for the module example (`modules_basic_usage_cpp20`). Due to evolving CMake and compiler support, this particular target might require a very recent CMake version (3.28+) and a compatible compiler (GCC 11+/Clang 16+/MSVC VS2022 17.5+) for the most reliable build. If it fails, refer to the conceptual compilation notes in `cpp20/core_language/modules_basic_usage.cpp` and your compiler's documentation.
+-   **Other C++20 Features (Coroutines, etc.):** The CMake files attempt to set necessary compiler flags (like `-fcoroutines` for GCC/Clang or `/await` for MSVC for coroutines).
+-   **File System & Threads:** Linkage for `std::filesystem` and `std::thread` (pthreads) is handled by the CMake scripts.
+
+The individual compilation instructions in each source file's comments are still valid for building examples one by one without CMake.
+
 ## Contributing
 
 Feel free to suggest improvements, corrections, or new feature examples by opening an issue or pull request.
