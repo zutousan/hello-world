@@ -1,0 +1,19 @@
+# CMake build files
+build/
+**/build/
+CMakeCache.txt
+*.cmake
+CMakeFiles/
+Makefile
+cmake_install.cmake
+compile_commands.json
+
+# Common executable and object file patterns
+*.out
+*.exe
+*.o
+*.obj
+
+# OS-specific files
+.DS_Store
+Thumbs.db
